@@ -1,0 +1,13 @@
+diff --git src/build-data/cc/gcc.txt src/build-data/cc/gcc.txt
+index 7249fae8e..69c00bbbe 100644
+--- src/build-data/cc/gcc.txt
++++ src/build-data/cc/gcc.txt
+@@ -49,7 +49,7 @@ openbsd -> "$(CXX) -shared -fPIC"
+ </so_link_commands>
+ 
+ <binary_link_commands>
+-linux         -> "$(LINKER) -Wl,-rpath=\$$ORIGIN"
++linux         -> "$(LINKER)"
+ default       -> "$(LINKER)"
+ </binary_link_commands>
+ 
