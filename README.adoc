@@ -1,6 +1,6 @@
-= Ribose RPM Spec for NAME
+= Ribose RPM Spec for botan2
 
-image:https://img.shields.io/travis/riboseinc/rpm-spec-NAME/master.svg[Build Status (Travis CI), link=https://travis-ci.org/riboseinc/rpm-spec-NAME]
+image:https://img.shields.io/travis/riboseinc/rpm-spec-botan2/master.svg[Build Status (Travis CI), link=https://travis-ci.org/riboseinc/rpm-spec-botan2]
 
 == Introduction
 
