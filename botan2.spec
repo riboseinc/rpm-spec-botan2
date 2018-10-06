@@ -1,7 +1,7 @@
 %global major_version 2
 
 Name:           botan2
-Version:        2.6.0
+Version:        2.8.0
 Release:        1%{?dist}
 Summary:        Crypto and TLS for C++11
 
@@ -9,13 +9,12 @@ License:        BSD
 URL:            https://botan.randombit.net/
 Source0:        https://botan.randombit.net/releases/Botan-%{version}.tgz
 Patch0:         01-remove-rpath-gcc.patch
-Patch1:         02-sphinx-concurrency.patch
 
 BuildRequires:  make
 BuildRequires:  gcc-c++
 BuildRequires:  python%{python3_pkgversion}
 BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  %{_bindir}/sphinx-build
+BuildRequires:  python-virtualenv
 BuildRequires:  %{_bindir}/rst2man
 BuildRequires:  bzip2-devel
 BuildRequires:  zlib-devel
@@ -63,7 +62,6 @@ This package contains the Python3 binding for %{name}.
 %prep
 %setup -q -n Botan-%{version}
 %patch0 -p0
-%patch1 -p0
 
 
 %build
@@ -71,6 +69,11 @@ export CXXFLAGS="${CXXFLAGS:-%{optflags}}"
 
 # we have the necessary prerequisites, so enable optional modules
 %global enable_modules bzip2,zlib,openssl
+
+# need a newer sphinx-build
+virtualenv -p python%{python3_version} venv
+venv/bin/pip install sphinx
+. venv/bin/activate
 
 %{__python3} ./configure.py \
         --prefix=%{_prefix} \
@@ -137,6 +140,11 @@ LD_LIBRARY_PATH=%{buildroot}%{_libdir} ./botan-test
 
 
 %changelog
+* Sat Oct 06 2018 Daniel Wyatt <daniel.wyatt@ribose.com> - 2.8.0-1
+- New upstream release.
+- Dropped patch 02-sphinx-concurrency (upstreamed).
+- Use a virtualenv for sphinx (botan now requires a much newer version).
+
 * Sat Jun 16 2018 Daniel Wyatt <daniel.wyatt@ribose.com> - 2.6.0-1
 - Adapted for CentOS/RHEL.
 - Add patch to disable sphinx concurrency if not supported.
