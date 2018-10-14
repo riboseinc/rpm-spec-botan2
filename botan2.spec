@@ -1,8 +1,11 @@
 %global major_version 2
+%bcond_without bzip2
+%bcond_without zlib
+%bcond_without openssl
 
 Name:           botan2
 Version:        2.8.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Crypto and TLS for C++11
 
 License:        BSD
@@ -16,9 +19,9 @@ BuildRequires:  python%{python3_pkgversion}
 BuildRequires:  python%{python3_pkgversion}-devel
 BuildRequires:  python-virtualenv
 BuildRequires:  %{_bindir}/rst2man
-BuildRequires:  bzip2-devel
-BuildRequires:  zlib-devel
-BuildRequires:  openssl-devel
+%{?with_bzip2:BuildRequires:   bzip2-devel}
+%{?with_zlib:BuildRequires:    zlib-devel}
+%{?with_openssl:BuildRequires: openssl-devel}
 
 %description
 Botan is a BSD-licensed crypto library written in C++. It provides a
@@ -67,8 +70,17 @@ This package contains the Python3 binding for %{name}.
 %build
 export CXXFLAGS="${CXXFLAGS:-%{optflags}}"
 
-# we have the necessary prerequisites, so enable optional modules
-%global enable_modules bzip2,zlib,openssl
+%{lua:
+  local enabled = {}
+  for i,module in ipairs({'bzip2', 'zlib', 'openssl'}) do
+    if rpm.expand('%with_' .. module) == '1' then
+      table.insert(enabled, module)
+    end
+  end
+  if enabled[1] ~= nil then
+    rpm.define('enable_modules ' .. table.concat(enabled, ','))
+  end
+}
 
 # need a newer sphinx-build
 virtualenv -p python%{python3_version} venv
@@ -82,7 +94,7 @@ venv/bin/pip install sphinx
         --cc=gcc \
         --os=linux \
         --cpu=%{_arch} \
-        --enable-modules=%{enable_modules} \
+        %{?enable_modules:--enable-modules=%{enable_modules}} \
         --with-python-version=%{python3_version} \
         --with-sphinx \
         --with-rst2man \
@@ -140,6 +152,9 @@ LD_LIBRARY_PATH=%{buildroot}%{_libdir} ./botan-test
 
 
 %changelog
+* Fri Oct 12 2018 Daniel Wyatt <daniel.wyatt@ribose.com> - 2.8.0-2
+- Make modules configurable.
+
 * Sat Oct 06 2018 Daniel Wyatt <daniel.wyatt@ribose.com> - 2.8.0-1
 - New upstream release.
 - Dropped patch 02-sphinx-concurrency (upstreamed).
