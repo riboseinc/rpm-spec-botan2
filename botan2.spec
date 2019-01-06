@@ -4,8 +4,8 @@
 %bcond_without openssl
 
 Name:           botan2
-Version:        2.8.0
-Release:        2%{?dist}
+Version:        2.9.0
+Release:        1%{?dist}
 Summary:        Crypto and TLS for C++11
 
 License:        BSD
@@ -15,6 +15,7 @@ Patch0:         01-remove-rpath-gcc.patch
 
 BuildRequires:  make
 BuildRequires:  gcc-c++
+BuildRequires:  epel-rpm-macros
 BuildRequires:  python%{python3_pkgversion}
 BuildRequires:  python%{python3_pkgversion}-devel
 BuildRequires:  python-virtualenv
@@ -70,17 +71,7 @@ This package contains the Python3 binding for %{name}.
 %build
 export CXXFLAGS="${CXXFLAGS:-%{optflags}}"
 
-%{lua:
-  local enabled = {}
-  for i,module in ipairs({'bzip2', 'zlib', 'openssl'}) do
-    if rpm.expand('%with_' .. module) == '1' then
-      table.insert(enabled, module)
-    end
-  end
-  if enabled[1] ~= nil then
-    rpm.define('enable_modules ' .. table.concat(enabled, ','))
-  end
-}
+%global enable_modules %{?with_bzip2:bzip2,}%{?with_zlib:zlib,}%{?with_openssl:openssl,}
 
 # need a newer sphinx-build
 virtualenv -p python%{python3_version} venv
@@ -152,6 +143,10 @@ LD_LIBRARY_PATH=%{buildroot}%{_libdir} ./botan-test
 
 
 %changelog
+* Fri Jan 04 2019 Daniel Wyatt <daniel.wyatt@ribose.com> - 2.9.0-1
+- Add missing epel-rpm-macros build dependency (use of python3_pkgversion).
+- Simplify enable_modules (2.9.0 includes 4a264db).
+
 * Fri Oct 12 2018 Daniel Wyatt <daniel.wyatt@ribose.com> - 2.8.0-2
 - Make modules configurable.
 
