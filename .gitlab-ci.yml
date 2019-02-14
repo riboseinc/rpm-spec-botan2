@@ -1,34 +1,6 @@
 ---
 
-image:
-  name: centos:7
-
-stages:
-  - build
-  - test
-  - deploy
-
-before_script:
-  - |
-    set -euxo pipefail
-    yum -y -q install git
-
-build:
-  stage: build
-  artifacts:
-    name: RPMS
-    expire_in: 30 days
-    paths:
-      - RPMS/
-  script: |
-    git clone --depth 1 https://github.com/riboseinc/rpm-specs /usr/local/rpm-specs
-    ln -s "$CI_PROJECT_DIR" /usr/local/rpm-specs/botan2
-    cd /usr/local/rpm-specs/botan2
-    ./prepare.sh
-    # just for informational purposes
-    for file in ~/rpmbuild/RPMS/**/*.rpm; do echo "$file"; rpm -qlpv "$file"; echo; done
-    # make sure our artifacts are uploaded
-    mv ~/rpmbuild/RPMS "$CI_PROJECT_DIR"
+include: 'https://raw.githubusercontent.com/riboseinc/rpm-specs/master/ci.template.yml'
 
 test:
   stage: test
@@ -46,32 +18,4 @@ test:
     yum -y -q install epel-release
     yum -y -q localinstall RPMS/x86_64/python34-botan2*.rpm
     ./tests/test.py
-
-.deploy:
-  only:
-    - master
-
-github-release:
-  extends: .deploy
-  stage: deploy
-  script: |
-    pkgver=$(rpm -qp --queryformat '%{VERSION}-%{RELEASE}' RPMS/x86_64/botan2-2*.rpm)
-    # we need a newish ruby for create-github-release.rb
-    yum -y -q install centos-release-scl
-    yum -y -q install rh-ruby25
-    # workaround for scl_source bug/limitation
-    set +eu
-    source scl_source enable rh-ruby25
-    set -eu
-    # release it
-    git clone --depth 1 https://github.com/riboseinc/create-github-release
-    cd create-github-release
-    gem install bundler -v 1.16.4
-    bundle install
-    bundle exec ./create-github-release.rb \
-      riboseinc/rpm-spec-botan2 \
-      "$pkgver" \
-      --name "botan $pkgver" \
-      --release-notes "Automatically built in commit $(echo $CI_COMMIT_SHA | cut -c 1-8)." \
-      "$CI_PROJECT_DIR"/RPMS/**/*.rpm
 
