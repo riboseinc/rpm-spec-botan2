@@ -4,7 +4,7 @@
 %bcond_without openssl
 
 Name:           botan2
-Version:        2.9.0
+Version:        2.10.0
 Release:        1%{?dist}
 Summary:        Crypto and TLS for C++11
 
