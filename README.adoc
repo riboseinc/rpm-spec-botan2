@@ -1,11 +1,9 @@
 = Ribose RPM Spec for botan2
 
-image:https://img.shields.io/travis/riboseinc/rpm-spec-botan2/master.svg[Build Status (Travis CI), link=https://travis-ci.org/riboseinc/rpm-spec-botan2]
+image:https://gitlab.com/ribose/rpm-spec/rpm-spec-botan2/badges/master/pipeline.svg[Build Status (GitLab CI), link=https://gitlab.com/ribose/rpm-spec/rpm-spec-botan2/commits/master]
 
 == Introduction
 
 This repository hosts the RPM spec & related Docker files for building the RPM
 package.
 
-It uses code from https://github.com/riboseinc/rpm-specs[`rpm-specs`]
-(added as a Git submodule).
