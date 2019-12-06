@@ -16,6 +16,6 @@ test:
     ./tests/test
     # test the python package
     yum -y -q install epel-release
-    yum -y -q localinstall RPMS/x86_64/python34-botan2*.rpm
+    yum -y -q localinstall RPMS/x86_64/python3*-botan2*.rpm
     ./tests/test.py
 

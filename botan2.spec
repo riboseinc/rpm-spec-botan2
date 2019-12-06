@@ -4,13 +4,13 @@
 %bcond_without openssl
 
 Name:           botan2
-Version:        2.10.0
+Version:        2.12.1
 Release:        1%{?dist}
 Summary:        Crypto and TLS for C++11
 
 License:        BSD
 URL:            https://botan.randombit.net/
-Source0:        https://botan.randombit.net/releases/Botan-%{version}.tgz
+Source0:        https://botan.randombit.net/releases/Botan-%{version}.tar.xz
 Patch0:         01-remove-rpath-gcc.patch
 
 BuildRequires:  make
@@ -102,7 +102,6 @@ sed -e '1{/^#!/d}' -i %{buildroot}%{python3_sitearch}/botan2.py
 
 # doc installation fixups
 mv %{buildroot}%{_docdir}/botan-%{version} %{buildroot}%{_pkgdocdir}
-rm -r %{buildroot}%{_pkgdocdir}/manual/{.doctrees,.buildinfo}
 
 
 %post -p /sbin/ldconfig
@@ -129,7 +128,7 @@ rm -r %{buildroot}%{_pkgdocdir}/manual/{.doctrees,.buildinfo}
 %files doc
 %license license.txt
 %dir %{_pkgdocdir}
-%{_pkgdocdir}/manual
+%{_pkgdocdir}/handbook
 
 
 %files -n python%{python3_pkgversion}-%{name}
