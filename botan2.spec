@@ -11,7 +11,6 @@ Summary:        Crypto and TLS for C++11
 License:        BSD
 URL:            https://botan.randombit.net/
 Source0:        https://botan.randombit.net/releases/Botan-%{version}.tar.xz
-Patch0:         01-remove-rpath-gcc.patch
 
 BuildRequires:  make
 BuildRequires:  gcc-c++
@@ -65,7 +64,6 @@ This package contains the Python3 binding for %{name}.
 
 %prep
 %setup -q -n Botan-%{version}
-%patch0 -p0
 
 
 %build
@@ -142,6 +140,10 @@ LD_LIBRARY_PATH=%{buildroot}%{_libdir} ./botan-test
 
 
 %changelog
+* Wed Dec 30 2020 Daniel Wyatt <daniel.wyatt@ribose.com> - 2.14.0-1
+- New upstream release.
+- Dropped patch 01-remove-rpath-gcc (upstreamed).
+
 * Fri Jan 04 2019 Daniel Wyatt <daniel.wyatt@ribose.com> - 2.9.0-1
 - Add missing epel-rpm-macros build dependency (use of python3_pkgversion).
 - Simplify enable_modules (2.9.0 includes 4a264db).
