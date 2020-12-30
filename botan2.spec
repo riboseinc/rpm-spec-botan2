@@ -4,7 +4,7 @@
 %bcond_without openssl
 
 Name:           botan2
-Version:        2.14.0
+Version:        2.16.0
 Release:        1%{?dist}
 Summary:        Crypto and TLS for C++11
 
@@ -140,6 +140,9 @@ LD_LIBRARY_PATH=%{buildroot}%{_libdir} ./botan-test
 
 
 %changelog
+* Wed Dec 30 2020 Daniel Wyatt <daniel.wyatt@ribose.com> - 2.16.0-1
+- New upstream release.
+
 * Wed Dec 30 2020 Daniel Wyatt <daniel.wyatt@ribose.com> - 2.14.0-1
 - New upstream release.
 - Dropped patch 01-remove-rpath-gcc (upstreamed).
