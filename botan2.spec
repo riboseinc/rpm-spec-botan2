@@ -5,7 +5,7 @@
 
 Name:           botan2
 Version:        2.16.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Crypto and TLS for C++11
 
 License:        BSD
@@ -140,6 +140,9 @@ LD_LIBRARY_PATH=%{buildroot}%{_libdir} ./botan-test
 
 
 %changelog
+* Mon Aug  8 2022 Jeffrey Lau <jeffrey.lau@ribose.com> - 2.16.0-2
+- Re-sign package
+
 * Wed Dec 30 2020 Daniel Wyatt <daniel.wyatt@ribose.com> - 2.16.0-1
 - New upstream release.
 
